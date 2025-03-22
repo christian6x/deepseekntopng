@@ -12,6 +12,10 @@ Ten Helm Chart służy do wdrożenia kompleksowego rozwiązania monitorowania ru
 - Helm 3.0+
 - Dostęp do PersistentVolume (PV) dla Redis i ntopng (opcjonalnie).
 
+## Wymagania w klastrze Kubernetesowym
+
+Aby wdrożyć deepseekntopng w klastrze Kubernetes, wymagane jest skonfigurowanie usługi typu `LoadBalancer`. Usługa `LoadBalancer` zapewnia zewnętrzny dostęp do ntopng przez publiczny adres IP. Upewnij się, że Twój klaster Kubernetes obsługuje tę funkcjonalność (np. w chmurze publicznej lub z włączonym modułem LoadBalancer, takim jak MetalLB w środowisku on-premise).
+
 ### Instalacja
 
 1. **Dodaj repozytorium Helm** (jeśli chart jest hostowany w repozytorium):
@@ -112,6 +116,10 @@ deepseekntopng/
 │   ├── netflow2ng-service.yaml
 │   └── _helpers.tpl
 ```
+
+## Wykorzystane narzędzia
+
+Ten projekt wykorzystuje kod z repozytorium [netflow2ng](https://github.com/synfinatic/netflow2ng), które jest używane do parsowania i przetwarzania danych NetFlow. Dziękujemy autorom za ich wkład w rozwój narzędzi do analizy ruchu sieciowego.
 
 ---
 
