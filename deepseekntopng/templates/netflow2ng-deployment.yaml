@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ntopngpack.fullname" . }}-netflow2ng
+  namespace: {{ include "ntopngpack.namespace" . }}  # Użyj funkcji pomocniczej
+  labels:
+    {{- include "ntopngpack.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "ntopngpack.selectorLabels" . | nindent 6 }}
+      app: netflow2ng
+  template:
+    metadata:
+      labels:
+        {{- include "ntopngpack.selectorLabels" . | nindent 8 }}
+        app: netflow2ng
+    spec:
+      containers:
+      - name: netflow2ng
+        image: {{ .Values.netflow2ng.image }}
+        ports:
+        - containerPort: {{ .Values.netflow2ng.netflowPort }}
+          protocol: UDP
+        - containerPort: {{ .Values.netflow2ng.zmqPort }}
+          protocol: TCP
+        args:
+        - "--listen={{ .Values.netflow2ng.input.address }}:{{ .Values.netflow2ng.input.port }}"
+      restartPolicy: Always

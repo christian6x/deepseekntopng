@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ntopngpack.fullname" . }}-ntopng-service
+  namespace: {{ include "ntopngpack.namespace" . }}  # Użyj funkcji pomocniczej
+  labels:
+    {{- include "ntopngpack.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.ntopng.service.type }}
+  ports:
+  - name: {{ .Values.ntopng.service.portNames.http }}
+    port: {{ .Values.ntopng.service.httpPort }}
+    targetPort: {{ .Values.ntopng.httpPort }}
+    protocol: TCP
+  - name: {{ .Values.ntopng.service.portNames.netflow }}
+    port: {{ .Values.ntopng.service.netflowPort }}
+    targetPort: {{ .Values.ntopng.netflowPort }}
+    protocol: UDP
+  selector:
+    {{- include "ntopngpack.selectorLabels" . | nindent 4 }}
+    app: ntopng
+  loadBalancerIP: {{ .Values.ntopng.service.loadBalancerIP }}

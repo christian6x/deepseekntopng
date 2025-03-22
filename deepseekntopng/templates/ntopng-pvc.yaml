@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "ntopngpack.fullname" . }}-ntopng-pvc
+  namespace: {{ include "ntopngpack.namespace" . }}  # Użyj funkcji pomocniczej
+  labels:
+    {{- include "ntopngpack.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - {{ .Values.ntopng.pvc.accessMode }}
+  resources:
+    requests:
+      storage: {{ .Values.ntopng.pvc.storage }}

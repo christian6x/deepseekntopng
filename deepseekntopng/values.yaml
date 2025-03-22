@@ -1,0 +1,56 @@
+namespace: default  # Domyślny namespace
+redis:
+  enabled: true
+  image: redis:latest
+  port: 6379
+  pvc:
+    enabled: true
+    storage: 1Gi
+    accessMode: ReadWriteMany
+  service:
+    type: ClusterIP
+    port: 6379
+    portNames:
+      redis: "redis"  # Nazwa portu dla Redis
+
+ntopng:
+  enabled: true
+  image: ntop/ntopng:latest
+  httpPort: 3000
+  netflowPort: 2055
+  pvc:
+    enabled: true
+    storage: 10Gi
+    accessMode: ReadWriteMany
+  service:
+    type: LoadBalancer
+    httpPort: 3000
+    netflowPort: 2055
+    loadBalancerIP: 192.168.88.205
+    portNames:
+      http: "http"      # Nazwa portu dla HTTP
+      netflow: "netflow"  # Nazwa portu dla NetFlow
+  args:
+    community: true
+    instanceName: "ubiquity"
+    noPromisc: true
+    disableLogin: 1
+    localNetworks: "192.168.88.0/24"
+    disableAutologout: true
+
+netflow2ng:
+  enabled: true
+  image: synfinatic/netflow2ng:latest
+  netflowPort: 2055
+  zmqPort: 5556
+  input:
+    address: 0.0.0.0
+    port: 2055
+  service:
+    type: LoadBalancer
+    netflowPort: 2055
+    zmqPort: 5556
+    loadBalancerIP: 192.168.88.204
+    portNames:
+      netflow: "netflow"  # Nazwa portu dla NetFlow
+      zmq: "zmq"        # Nazwa portu dla ZMQ

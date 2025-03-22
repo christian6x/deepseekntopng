@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ntopngpack.fullname" . }}-netflow2ng-service
+  namespace: {{ include "ntopngpack.namespace" . }}  # Użyj funkcji pomocniczej
+  labels:
+    {{- include "ntopngpack.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.netflow2ng.service.type }}
+  ports:
+  - name: {{ .Values.netflow2ng.service.portNames.netflow }}
+    port: {{ .Values.netflow2ng.service.netflowPort }}
+    targetPort: {{ .Values.netflow2ng.netflowPort }}
+    protocol: UDP
+  - name: {{ .Values.netflow2ng.service.portNames.zmq }}
+    port: {{ .Values.netflow2ng.service.zmqPort }}
+    targetPort: {{ .Values.netflow2ng.zmqPort }}
+    protocol: TCP
+  selector:
+    {{- include "ntopngpack.selectorLabels" . | nindent 4 }}
+    app: netflow2ng
+  loadBalancerIP: {{ .Values.netflow2ng.service.loadBalancerIP }}

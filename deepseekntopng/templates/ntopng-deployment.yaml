@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ntopngpack.fullname" . }}-ntopng
+  namespace: {{ include "ntopngpack.namespace" . }}  # Użyj funkcji pomocniczej do namespace'u
+  labels:
+    {{- include "ntopngpack.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "ntopngpack.selectorLabels" . | nindent 6 }}
+      app: ntopng
+  template:
+    metadata:
+      labels:
+        {{- include "ntopngpack.selectorLabels" . | nindent 8 }}
+        app: ntopng
+    spec:
+      containers:
+      - name: ntopng
+        image: {{ .Values.ntopng.image }}
+        ports:
+        - containerPort: {{ .Values.ntopng.httpPort }}
+          protocol: TCP
+        volumeMounts:
+        - mountPath: "/var/lib/ntopng"
+          name: ntopng-storage
+        args:
+        - '--community'
+        - '--interface=tcp://{{ include "ntopngpack.fullname" . }}-netflow2ng-service.{{ include "ntopngpack.namespace" . }}.svc.cluster.local:{{ .Values.netflow2ng.service.zmqPort }}'
+        - '--redis={{ include "ntopngpack.fullname" . }}-redis-service.{{ include "ntopngpack.namespace" . }}.svc.cluster.local:{{ .Values.redis.service.port }}'
+        - '--instance-name={{ .Values.ntopng.args.instanceName }}'
+        - '--no-promisc'
+        - '--disable-login={{ .Values.ntopng.args.disableLogin }}'
+        - '--local-networks={{ .Values.ntopng.args.localNetworks }}'
+        - '--disable-autologout'
+      volumes:
+      - name: ntopng-storage
+        persistentVolumeClaim:
+          claimName: {{ include "ntopngpack.fullname" . }}-ntopng-pvc
