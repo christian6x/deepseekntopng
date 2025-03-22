@@ -1,4 +1,4 @@
-## Opis Helm Chartu: `ntopngpack`
+## Opis Helm Chartu: `deepseekntopng`
 
 Ten Helm Chart służy do wdrożenia kompleksowego rozwiązania monitorowania ruchu sieciowego, składającego się z następujących komponentów:
 
@@ -77,7 +77,7 @@ Następnie otwórz przeglądarkę i przejdź do `http://localhost:3000`.
 Aby zaktualizować wdrożenie, użyj polecenia:
 
 ```bash
-helm upgrade my-release ./ntopngpack --namespace my-namespace
+helm upgrade my-release ./deepseekntopng --namespace my-namespace
 ```
 
 ### Usuwanie
@@ -97,7 +97,7 @@ Jeśli masz pytania lub problemy, skontaktuj się z autorem chartu lub zgłoś i
 ### Struktura katalogów
 
 ```
-ntopngpack/
+deepseekntopng/
 ├── Chart.yaml
 ├── values.yaml
 ├── README.md
