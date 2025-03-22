@@ -3,10 +3,10 @@ entries:
   deepseekntopng:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-03-22T15:04:47.788848998+01:00"
+    created: "2025-03-22T15:10:28.01493663+01:00"
     description: A Helm chart for deploying ntopng, a network traffic analysis tool,
       on Kubernetes. This chart is intended for private, non-commercial use only.
-    digest: 75b91fdfe7ddf0e11cd096076ceba34e34987c752364c6e004c26cf8b8e8b93b
+    digest: 52e39ad958c13c9174a8659be58ec051af5f444dc5583ec88eccc67e0046de5d
     keywords:
     - networking
     - monitoring
@@ -17,4 +17,4 @@ entries:
     urls:
     - deepseekntopng-0.1.0.tgz
     version: 0.1.0
-generated: "2025-03-22T15:04:47.788160648+01:00"
+generated: "2025-03-22T15:10:28.014288429+01:00"
