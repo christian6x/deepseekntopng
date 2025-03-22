@@ -17,22 +17,21 @@ Ten Helm Chart służy do wdrożenia kompleksowego rozwiązania monitorowania ru
 1. **Dodaj repozytorium Helm** (jeśli chart jest hostowany w repozytorium):
 
    ```bash
-   helm repo add my-repo https://charts.example.com
+   helm repo add deepseekntopng https://raw.githubusercontent.com/christian6x/deepseekntopng/main/
+   helm repo update
    ```
 
 2. **Zainstaluj chart**:
 
    ```bash
-   helm install home . --namespace ntopng --create-namespace --set netflow2ng.service.loadBalancerIP=192.168.88.204 --set ntopng.service.loadBalancerIP=192.168.88.205
-   helm install my-release ./ntopngpack --namespace my-namespace --create-namespace
+   helm install test deepseekntopng/deepseekntopng --namespace test --create-namespace --set netflow2ng.service.loadBalancerIP=192.168.88.224 --set ntopng.service.loadBalancerIP=192.168.88.225
    ```
 
     - **`home`**: Nazwa release'u Helm. Możesz ją dostosować do swoich potrzeb.
-    - **`.`**: Ścieżka do katalogu z Helm Chartem (bieżący katalog).
-    - **`--namespace ntopng`**: Namespace, w którym zostaną wdrożone zasoby. Jeśli namespace nie istnieje, zostanie utworzony dzięki fladze `--create-namespace`.
+    - **`--namespace test`**: Namespace, w którym zostaną wdrożone zasoby. Jeśli namespace nie istnieje, zostanie utworzony dzięki fladze `--create-namespace`.
     - **`--create-namespace`**: Tworzy namespace `ntopng`, jeśli nie istnieje.
-    - **`--set netflow2ng.service.loadBalancerIP=192.168.88.204`**: Ustawia statyczny adres IP dla LoadBalancera NetFlow2NG na `192.168.88.204`.
-    - **`--set ntopng.service.loadBalancerIP=192.168.88.205`**: Ustawia statyczny adres IP dla LoadBalancera ntopng na `192.168.88.205`.
+    - **`--set netflow2ng.service.loadBalancerIP=192.168.88.224`**: Ustawia statyczny adres IP dla LoadBalancera NetFlow2NG na `192.168.88.224`.
+    - **`--set ntopng.service.loadBalancerIP=192.168.88.225`**: Ustawia statyczny adres IP dla LoadBalancera ntopng na `192.168.88.225`.
 
 
 ### Konfiguracja
@@ -60,7 +59,7 @@ Wszystkie parametry konfiguracyjne są zdefiniowane w pliku `values.yaml`. Oto n
 
 - **`netflow2ng.enabled`**: Włącza/wyłącza wdrożenie NetFlow2NG (domyślnie: `true`).
 - **`netflow2ng.image`**: Obraz Dockera dla NetFlow2NG (domyślnie: `synfinatic/netflow2ng:latest`).
-- **`netflow2ng.input.address`**: Adres nasłuchiwania dla NetFlow (domyślnie: `192.168.88.204`).
+- **`netflow2ng.input.address`**: Adres nasłuchiwania dla NetFlow (domyślnie: `192.168.88.224`).
 - **`netflow2ng.input.port`**: Port nasłuchiwania dla NetFlow (domyślnie: `2055`).
 
 ### Użycie
