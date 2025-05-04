@@ -28,7 +28,8 @@ spec:
           name: ntopng-storage
         args:
         - '--community'
-        - '--interface=tcp://{{ include "ntopngpack.fullname" . }}-netflow2ng-service.{{ include "ntopngpack.namespace" . }}.svc.cluster.local:{{ .Values.netflow2ng.service.zmqPort }}'
+        - '--zmq'
+        - '--interface=tcp://{{ include "ntopngpack.fullname" . }}-netflow2ng-service.{{ include "ntopngpack.namespace" . }}.svc.cluster.local:{{ .Values.netflow2ng.service.zmqPort }}@zmq'
         - '--redis={{ include "ntopngpack.fullname" . }}-redis-service.{{ include "ntopngpack.namespace" . }}.svc.cluster.local:{{ .Values.redis.service.port }}'
         - '--instance-name={{ .Values.ntopng.args.instanceName }}'
         - '--no-promisc'
