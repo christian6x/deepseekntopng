@@ -1,0 +1,46 @@
+#!/bin/bash
+# Szablon release.sh — użycie:
+#   cp release.sh.template release.sh
+#   chmod +x release.sh
+#   ./release.sh --dry-run
+
+set -e
+
+DRY_RUN=0
+if [[ "$1" == "--dry-run" ]]; then
+  DRY_RUN=1
+  echo "== DRY RUN MODE =="
+fi
+
+CHART_DIR="deepseekntopng"
+CHART_NAME="deepseekntopng"
+
+# Pobierz wersję i zwiększ PATCH
+OLD_VERSION=$(grep '^version:' "$CHART_DIR/Chart.yaml" | awk '{print $2}')
+IFS='.' read -r MAJOR MINOR PATCH <<< "$OLD_VERSION"
+NEW_VERSION="$MAJOR.$MINOR.$((PATCH+1))"
+
+# Zmień wersję w Chart.yaml
+sed -i "s/^version: .*/version: $NEW_VERSION/" "$CHART_DIR/Chart.yaml"
+echo "Bumped chart version: $OLD_VERSION -> $NEW_VERSION"
+
+# Zbuduj paczkę
+PACKAGE_FILE="$CHART_NAME-$NEW_VERSION.tgz"
+helm package "$CHART_DIR" --destination . --version "$NEW_VERSION"
+echo "Packaged chart to $PACKAGE_FILE"
+
+# Zaktualizuj index.yaml
+helm repo index . --merge index.yaml
+echo "Updated index.yaml"
+
+if [[ "$DRY_RUN" -eq 0 ]]; then
+  git add "$CHART_DIR/Chart.yaml" "$PACKAGE_FILE" index.yaml
+  git commit -m "Release Helm chart v$NEW_VERSION"
+  git tag "v$NEW_VERSION"
+  git push
+  git push --tags
+  echo "Pushed changes and tag v$NEW_VERSION"
+else
+  echo "Dry run complete — nothing committed or pushed."
+fi
+
